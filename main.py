@@ -21,7 +21,7 @@ while game:
             x, y = pygame.mouse.get_pos()
             honoyTower.move(int(x / 500 * 3))
 
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             honoyTower.execute()
 
         if event.type == pygame.KEYDOWN and pygame.K_0 <= event.key <= pygame.K_9:
