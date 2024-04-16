@@ -10,6 +10,7 @@ class HanoiTower(object):
         self.color = (150, 110, 10)
         self.k = k
         self.selected = 0
+        self.run = False
         self.a = [[k - i for i in range(k)], [], []]
 
     def draw_towers(self):
@@ -28,6 +29,11 @@ class HanoiTower(object):
                 pygame.draw.rect(self.screen, color, (self.x + 50 - 5 * e + i * 132, h - 20 * hi - dh,
                                                       40 + 10 * e, 20), border_radius=10)
 
+        if self.run:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    self.run = False
+
         pygame.display.flip()
 
     def move(self, n):
@@ -38,13 +44,21 @@ class HanoiTower(object):
             self.selected = 0
 
     def execute(self):
+        self.run = True
         for i in range(self.k, 0, -1):
             self._request(i, 2)
+        self.run = False
 
     def _request(self, k, move_to):
         move_from = [i for i in range(3) if k in self.a[i]][0]
 
+        if move_from == move_to:
+            return 0
+
         while not (k == self.a[move_from][-1] and (not self.a[move_to] or self.a[move_to][-1] >= k)):
+            if not self.run:
+                return 0
+
             if k != self.a[move_from][-1]:
                 self._request(self.a[move_from][self.a[move_from].index(k) + 1], 3 - move_to - move_from)
 
@@ -54,4 +68,4 @@ class HanoiTower(object):
         self.selected = move_from + 1
         self.move(move_to)
         self.draw_towers()
-        time.sleep(0.01)
+        time.sleep(0.03)
